@@ -2,12 +2,15 @@ import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix(process.env.API_PREFIX ?? 'api');
-  app.enableCors({ origin: process.env.CORS_ORIGIN });
+  const configService = app.get(ConfigService)
+
+  app.setGlobalPrefix(configService.get<string>('API_PREFIX', 'api'));
+  app.enableCors({ origin: configService.get<string>('CORS_ORIGIN')});
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -16,7 +19,7 @@ async function bootstrap() {
     }),
   );
 
-  const port = process.env.PORT ?? 3000;
+  const port = configService.get<number>('PORT', 3000);
   await app.listen(port);
   console.log(`🍽️  API escuchando en http://localhost:${port}`);
 }
