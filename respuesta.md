@@ -1,0 +1,2 @@
+ una breve explicación de por qué validar la configuración al arrancar es mejor que fallar en tiempo de ejecución.
+ asi nos aseguramos de que las variables de entorno existan y sino fallara al principio en vez de fallar cuando se este utilizando un endpoint, ademas cuando falla por varibles de entorno el Joi no dice donde fallo
